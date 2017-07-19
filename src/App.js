@@ -4,6 +4,7 @@ import './reset.css'
 import './App.css';
 import TodoInput from './TodoInput'
 import TodoItem from './TodoItem'
+import * as localStore from './localStore'
 
 
 class App extends Component {
@@ -11,9 +12,8 @@ class App extends Component {
     super(props)
     this.state = {
       newTodo: '',
-      todoList: [
-        
-      ]
+      
+      todoList: localStore.load('todoList')||[]
     }
   }
   render() {
@@ -27,7 +27,6 @@ class App extends Component {
         </li>
       )
     })
-
     return (
       <div className="App">
         <h1>我的待办</h1>
@@ -41,6 +40,9 @@ class App extends Component {
         </ol>
       </div>
     )
+  }
+  componentDidUpdate(){
+    localStore.save('todoList',this.state.todoList)
   }
   toggle(e,todo){
     todo.status = todo.status === 'completed'?'':'completed'
